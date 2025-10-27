@@ -1,0 +1,5 @@
+State,Samples,Sensitivity,Specificity,Accuracy
+Standing,2,1.000,0.000,0.182
+Walking,4,0.000,1.000,0.636
+Jumping,2,0.000,1.000,0.818
+Still,3,0.000,1.000,0.727
