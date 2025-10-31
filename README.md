@@ -266,6 +266,7 @@ Hidden-Markov_Models/
 │   └── transition_matrix.png
 │
 ├── .gitignore
+├── Formative 2 - Hidden Markov Models_report
 ├── model_parameters.json
 ├── README.md
 └── requirements.txt
