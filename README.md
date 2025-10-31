@@ -26,7 +26,7 @@ This project implements a smartphone-based activity recognition system using Hid
 
 ## Motivation
 
-In elderly care facilities, continuous monitoring of daily activities is crucial for detecting falls and unusual behavior patterns. Unlike video surveillance, smartphone-based activity recognition preserves privacy while providing valuable health insights [2]. The core challenge is that while smartphones continuously measure motion through accelerometers and gyroscopes, the true activity remains hidden behind noisy sensor measurements. Hidden Markov Models naturally address this by treating activities as hidden states and sensor readings as observations, incorporating temporal dependencies in the recognition process [1], [3].
+In elderly care facilities, continuous monitoring of daily activities is crucial for detecting falls and unusual behavior patterns. Unlike video surveillance, smartphone-based activity recognition preserves privacy while providing valuable health insights [2]. The core challenge is that while smartphones continuously measure motion through accelerometers and gyroscopes, the true activity remains hidden behind noisy sensor measurements. Hidden Markov Models naturally address this by treating activities as hidden states and sensor readings as observations, incorporating temporal dependencies in the recognition process.
 
 ---
 
@@ -59,7 +59,7 @@ We collected **55 recordings** over two days using the Sensor Logger application
 3. **Validation:** Verified required columns, minimum duration (5s), and no timestamp gaps
 4. **Result:** All 55 recordings passed validation
 
-The synchronized data structure preserved: `time`, `accel_x/y/z`, `gyro_x/y/z`, `activity`, and `recording_id` for proper train/test splitting [4].
+The synchronized data structure preserved: `time`, `accel_x/y/z`, `gyro_x/y/z`, `activity`, and `recording_id` for proper train/test splitting.
 
 ### Data Characteristics
 
@@ -75,7 +75,7 @@ Raw sensor visualizations confirmed distinct activity signatures:
 
 ### Feature Engineering Strategy
 
-We extracted **39 features** combining time-domain statistics and frequency-domain characteristics [4], [5].
+We extracted **39 features** combining time-domain statistics and frequency-domain characteristics.
 
 #### Time-Domain Features (30 features)
 
@@ -96,7 +96,7 @@ Applied FFT to accelerometer axes to extract:
 - **Dominant frequency:** Peak frequency in spectrum (walking: ~2 Hz, jumping: ~1-1.5 Hz)
 - **Spectral energy:** Σ|FFT(x)|² - quantifies total frequency content
 
-**Rationale:** Time-domain features alone cannot distinguish random noise from structured periodicity. Walking and standing might have similar variance, but walking shows a sharp frequency peak at the step rate while standing shows a flat noise spectrum [4].
+**Rationale:** Time-domain features alone cannot distinguish random noise from structured periodicity. Walking and standing might have similar variance, but walking shows a sharp frequency peak at the step rate while standing shows a flat noise spectrum.
 
 ### Feature Importance
 
@@ -110,7 +110,7 @@ Applied FFT to accelerometer axes to extract:
 | 4 | accel_z_range | 7.42 |
 | 5 | accel_magnitude | 7.26 |
 
-**Key insight:** Gyroscope features dominated (5 of top 10), proving rotational motion is more discriminative than linear acceleration for these activities [5].
+**Key insight:** Gyroscope features dominated (5 of top 10), proving rotational motion is more discriminative than linear acceleration for these activities.
 
 ### Normalization
 
@@ -135,14 +135,14 @@ Applied Z-score standardization: z = (x-μ)/σ using training data statistics to
 
 ### Training Approach
 
-We used Gaussian Naive Bayes-inspired training due to limited data (44 training samples ÷ 4 classes ≈ 11 per class) [1]. This approach:
+We used Gaussian Naive Bayes-inspired training due to limited data (44 training samples ÷ 4 classes ≈ 11 per class). This approach:
 1. Computes class-wise mean μ and standard deviation σ for each feature
 2. Calculates prior probabilities from class frequencies
 3. Predicts via maximum log-likelihood: argmax[−0.5Σ((x−μ)/σ)² + log(π)]
 
 ### Viterbi Algorithm Concept
 
-The system embodies Viterbi principles for finding the most likely state sequences [1]:
+The system embodies Viterbi principles for finding the most likely state sequences:
 1. **Initialization:** δ₁(i) = log(πᵢ) + log(B(x₁|sᵢ))
 2. **Recursion:** δₜ(j) = maxᵢ[δₜ₋₁(i) + log(Aᵢⱼ)] + log(B(xₜ|sⱼ))
 3. **Backtrack** to recover the optimal path
